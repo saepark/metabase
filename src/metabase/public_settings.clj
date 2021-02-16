@@ -389,3 +389,9 @@
   :visibility :public
   :type       :keyword
   :default    "sunday")
+
+(defsetting redshift-fetch-size
+  (deferred-tru "Controls the fetch size used for Redshift queries (in PreparedStatement), via defaultRowFetchSize.")
+  :visibility :public
+  :type       :integer
+  :default    5000)
