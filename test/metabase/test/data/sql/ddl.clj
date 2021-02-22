@@ -81,10 +81,10 @@
         columns (keys (first rows))
         values  (for [row rows]
                   (for [value (map row columns)]
-                    (sql.qp/->honeysql driver value)))]
-    (-> (apply h/columns (for [column columns]
-                           (sql.qp/->honeysql driver
-                             (hx/identifier :field (tx/format-name driver (u/qualified-name column))))))
+                    (sql.qp/->honeysql driver value)))
+        col-nms (for [column columns]
+                  (sql.qp/->honeysql driver (tx/format-name driver (u/qualified-name column))))]
+    (-> (apply h/columns (map keyword col-nms)) ; HoneySQL 1.x needs these to be keywords
         (h/insert-into table-identifier)
         (h/values values))))
 
