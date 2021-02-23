@@ -135,6 +135,11 @@
                      (tokenize (normalize query-string))
                      result)))
 
+(defn- pinned-score
+  [{:keys [collection_position]}]
+  (or (some-> collection_position -)
+      0))
+
 (defn- compare-score-and-result
   "Compare maps of scores and results. Must return -1, 0, or 1. The score is assumed to be a vector, and will be
   compared in order."
@@ -163,7 +168,8 @@
 
 (defn- combined-score
   [{:keys [text-score result]}]
-  [(- text-score)
+  [(pinned-score result)
+   (- text-score)
    (model->sort-position (:model result))
    (:name result)])
 
